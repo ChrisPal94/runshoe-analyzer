@@ -9,7 +9,11 @@ interface AngleSelectorProps {
   className?: string
 }
 
-export function AngleSelector({ selectedAngle, onSelectAngle, className }: AngleSelectorProps) {
+export function AngleSelector({
+  selectedAngle,
+  onSelectAngle,
+  className
+}: AngleSelectorProps) {
   const angles = [
     {
       id: 'heel' as const,
@@ -19,7 +23,7 @@ export function AngleSelector({ selectedAngle, onSelectAngle, className }: Angle
     },
     {
       id: 'arch' as const,
-      label: 'Arch View', 
+      label: 'Arch View',
       description: 'Capture the side arch area',
       icon: '🦶'
     },
@@ -55,7 +59,7 @@ export function AngleSelector({ selectedAngle, onSelectAngle, className }: Angle
             </Button>
           ))}
         </div>
-        
+
         <div className="mt-4 text-sm text-gray-600">
           <p className="font-medium">Capture Tips:</p>
           <ul className="list-disc list-inside mt-1 space-y-1">

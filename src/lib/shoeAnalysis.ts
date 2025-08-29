@@ -1,50 +1,50 @@
 import { ShoeAnalysis, AnalysisResult } from './types'
 
+// Private helper function
+async function simulateAnalysis(captures: string[]): Promise<AnalysisResult> {
+  // Simulate processing time
+  await new Promise(resolve => setTimeout(resolve, 2000))
+  
+  // Mock analysis based on number of captures
+  const confidence = Math.min(0.8 + (captures.length * 0.1), 0.95)
+  
+  const wearPatterns = [
+    'Normal wear pattern',
+    'Excessive heel wear',
+    'Forefoot wear',
+    'Uneven wear',
+    'Minimal wear'
+  ]
+  
+  const shoeTypes = [
+    'Running shoes',
+    'Walking shoes',
+    'Athletic shoes',
+    'Casual shoes'
+  ]
+  
+  const recommendations = [
+    'Consider replacing your shoes',
+    'Your shoes are in good condition',
+    'Monitor wear patterns',
+    'Consider orthotics',
+    'Rotate between multiple pairs'
+  ]
+  
+  return {
+    shoeType: shoeTypes[Math.floor(Math.random() * shoeTypes.length)],
+    wearPattern: wearPatterns[Math.floor(Math.random() * wearPatterns.length)],
+    recommendations: recommendations.slice(0, 2),
+    confidence
+  }
+}
+
 export const shoeAnalysis = {
   // Analyze shoe wear patterns
   async analyzeShoe(captures: string[]): Promise<AnalysisResult> {
     // Simulate analysis - in a real app, this would use ML/AI
-    const analysis = await this.simulateAnalysis(captures)
+    const analysis = await simulateAnalysis(captures)
     return analysis
-  },
-
-  // Simulate analysis process
-  private async simulateAnalysis(captures: string[]): Promise<AnalysisResult> {
-    // Simulate processing time
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    // Mock analysis based on number of captures
-    const confidence = Math.min(0.8 + (captures.length * 0.1), 0.95)
-    
-    const wearPatterns = [
-      'Normal wear pattern',
-      'Excessive heel wear',
-      'Forefoot wear',
-      'Uneven wear',
-      'Minimal wear'
-    ]
-    
-    const shoeTypes = [
-      'Running shoes',
-      'Walking shoes',
-      'Athletic shoes',
-      'Casual shoes'
-    ]
-    
-    const recommendations = [
-      'Consider replacing your shoes',
-      'Your shoes are in good condition',
-      'Monitor wear patterns',
-      'Consider orthotics',
-      'Rotate between multiple pairs'
-    ]
-    
-    return {
-      shoeType: shoeTypes[Math.floor(Math.random() * shoeTypes.length)],
-      wearPattern: wearPatterns[Math.floor(Math.random() * wearPatterns.length)],
-      recommendations: recommendations.slice(0, 2),
-      confidence
-    }
   },
 
   // Create analysis result

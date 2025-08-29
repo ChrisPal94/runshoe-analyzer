@@ -12,7 +12,12 @@ interface PhotoPreviewProps {
   className?: string
 }
 
-export function PhotoPreview({ preview, onRetake, onAccept, className }: PhotoPreviewProps) {
+export function PhotoPreview({
+  preview,
+  onRetake,
+  onAccept,
+  className
+}: PhotoPreviewProps) {
   const [isLoading, setIsLoading] = useState(false)
 
   const angleLabels = {
@@ -37,11 +42,13 @@ export function PhotoPreview({ preview, onRetake, onAccept, className }: PhotoPr
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
-          <img
-            src={preview.image}
-            alt={`${angleLabels[preview.angle]} preview`}
-            className="w-full h-full object-cover"
-          />
+          {preview.image && (
+            <img
+              src={preview.image}
+              alt={`${angleLabels[preview.angle]} preview`}
+              className="w-full h-full object-cover"
+            />
+          )}
           {!preview.isValid && (
             <div className="absolute inset-0 bg-red-500/20 flex items-center justify-center">
               <div className="text-center text-red-600">
@@ -65,11 +72,7 @@ export function PhotoPreview({ preview, onRetake, onAccept, className }: PhotoPr
         )}
 
         <div className="flex gap-2">
-          <Button
-            onClick={onRetake}
-            variant="outline"
-            className="flex-1"
-          >
+          <Button onClick={onRetake} variant="outline" className="flex-1">
             Retake Photo
           </Button>
           <Button

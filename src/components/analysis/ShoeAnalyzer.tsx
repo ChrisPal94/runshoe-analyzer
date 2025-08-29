@@ -13,7 +13,11 @@ interface ShoeAnalyzerProps {
   className?: string
 }
 
-export function ShoeAnalyzer({ captures, onAnalysisComplete, className }: ShoeAnalyzerProps) {
+export function ShoeAnalyzer({
+  captures,
+  onAnalysisComplete,
+  className
+}: ShoeAnalyzerProps) {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [progress, setProgress] = useState(0)
   const [currentStep, setCurrentStep] = useState('')
@@ -38,7 +42,7 @@ export function ShoeAnalyzer({ captures, onAnalysisComplete, className }: ShoeAn
       for (let i = 0; i < analysisSteps.length; i++) {
         setCurrentStep(analysisSteps[i])
         setProgress((i + 1) * (100 / analysisSteps.length))
-        await new Promise(resolve => setTimeout(resolve, 800))
+        await new Promise((resolve) => setTimeout(resolve, 800))
       }
 
       // Perform actual analysis
@@ -59,7 +63,9 @@ export function ShoeAnalyzer({ captures, onAnalysisComplete, className }: ShoeAn
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="text-sm text-gray-600">
-          <p>Captured {captures.length} image{captures.length !== 1 ? 's' : ''}</p>
+          <p>
+            Captured {captures.length} image{captures.length !== 1 ? 's' : ''}
+          </p>
         </div>
 
         {isAnalyzing ? (
@@ -79,7 +85,10 @@ export function ShoeAnalyzer({ captures, onAnalysisComplete, className }: ShoeAn
             {captures.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                 {captures.map((capture, index) => (
-                  <div key={index} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                  <div
+                    key={index}
+                    className="aspect-square bg-gray-100 rounded-lg overflow-hidden"
+                  >
                     <img
                       src={capture}
                       alt={`Capture ${index + 1}`}

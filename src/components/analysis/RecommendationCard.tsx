@@ -14,12 +14,12 @@ interface RecommendationCardProps {
   className?: string
 }
 
-export function RecommendationCard({ 
-  title, 
-  description, 
-  priority, 
-  action, 
-  className 
+export function RecommendationCard({
+  title,
+  description,
+  priority,
+  action,
+  className
 }: RecommendationCardProps) {
   const priorityColors = {
     high: {
@@ -30,14 +30,14 @@ export function RecommendationCard({
     },
     medium: {
       bg: 'bg-yellow-50',
-      border: 'border-yellow-200', 
+      border: 'border-yellow-200',
       text: 'text-yellow-800',
       badge: 'bg-yellow-100 text-yellow-800'
     },
     low: {
       bg: 'bg-green-50',
       border: 'border-green-200',
-      text: 'text-green-800', 
+      text: 'text-green-800',
       badge: 'bg-green-100 text-green-800'
     }
   }
@@ -48,19 +48,17 @@ export function RecommendationCard({
     <Card className={`${colors.bg} ${colors.border} ${className}`}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className={`text-lg ${colors.text}`}>
-            {title}
-          </CardTitle>
-          <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors.badge}`}>
+          <CardTitle className={`text-lg ${colors.text}`}>{title}</CardTitle>
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${colors.badge}`}
+          >
             {priority.charAt(0).toUpperCase() + priority.slice(1)} Priority
           </span>
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
-        <p className="text-gray-700">
-          {description}
-        </p>
-        
+        <p className="text-gray-700">{description}</p>
+
         {action && (
           <Button
             onClick={action.onClick}
