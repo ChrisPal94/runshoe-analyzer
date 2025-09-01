@@ -41,12 +41,12 @@ export function PhotoPreview({
         <CardTitle>{angleLabels[preview.angle]} Preview</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
+        <div className="relative bg-gray-100 rounded-lg overflow-hidden">
           {preview.image && (
             <img
               src={preview.image}
               alt={`${angleLabels[preview.angle]} preview`}
-              className="w-full h-full object-cover"
+              className="w-full h-auto max-h-96 object-contain"
             />
           )}
           {!preview.isValid && (

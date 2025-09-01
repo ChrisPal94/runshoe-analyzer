@@ -2,6 +2,11 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   /* config options here */
+  allowedDevOrigins: [
+    'local-origin.dev',
+    '*.local-origin.dev',
+    '192.168.100.139'
+  ],
 
   // Suppress hydration warnings caused by browser extensions
   onRecoverableError: (

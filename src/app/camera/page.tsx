@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
-import Webcam from 'react-webcam'
 import { PhotoPreview } from '@/components/camera/PhotoPreview'
 import { AngleSelector } from '@/components/camera/AngleSelector'
 import { cameraUtils } from '@/lib/cameraUtils'
@@ -20,18 +19,33 @@ export default function CameraPage() {
   )
   const [showPreview, setShowPreview] = useState(false)
 
-  const webcamRef = useRef<Webcam>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const capturePhoto = useCallback(() => {
-    if (webcamRef.current) {
-      const imageSrc = webcamRef.current.getScreenshot()
-      if (imageSrc && selectedAngle) {
-        const preview = cameraUtils.createPhotoPreview(imageSrc, selectedAngle)
-        setCurrentPreview(preview)
-        setShowPreview(true)
+  const handleFileSelect = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0]
+      if (file && selectedAngle) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          const imageSrc = e.target?.result as string
+          if (imageSrc) {
+            const preview = cameraUtils.createPhotoPreview(
+              imageSrc,
+              selectedAngle
+            )
+            setCurrentPreview(preview)
+            setShowPreview(true)
+          }
+        }
+        reader.readAsDataURL(file)
       }
-    }
-  }, [webcamRef, selectedAngle])
+      // Reset the input so the same file can be selected again
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    },
+    [selectedAngle]
+  )
 
   const handleRetake = () => {
     setShowPreview(false)
@@ -59,10 +73,16 @@ export default function CameraPage() {
     setShowPreview(false)
   }
 
+  const openCamera = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+    }
+  }
+
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container max-w-4xl px-4 py-8 mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="mb-2 text-3xl font-bold text-gray-900">
           Capture Shoe Images
         </h1>
         <p className="text-gray-600">
@@ -81,43 +101,52 @@ export default function CameraPage() {
 
         {/* Camera Capture */}
         {selectedAngle && !showPreview && (
-          <div className="relative w-full h-96 bg-gray-200 rounded-lg overflow-hidden">
-            <Webcam
-              audio={false}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-              width="100%"
-              height="100%"
-              videoConstraints={{
-                facingMode: 'environment'
-              }}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            <button
-              onClick={capturePhoto}
-              className="absolute bottom-4 left-1/2 -translate-x-1/2 p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+          <div className="relative w-full overflow-hidden bg-gray-200 rounded-lg h-96">
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <div className="mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-16 h-16 mx-auto text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.218A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.218A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </div>
+              <h3 className="mb-2 text-lg font-semibold text-gray-700">
+                Ready to capture {selectedAngle} view
+              </h3>
+              <p className="mb-6 text-gray-500">
+                Tap the button below to open your camera
+              </p>
+              <button
+                onClick={openCamera}
+                className="px-6 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.218A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.218A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-            </button>
+                Open Camera
+              </button>
+            </div>
+
+            {/* Hidden file input for camera capture */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
           </div>
         )}
 
@@ -132,21 +161,21 @@ export default function CameraPage() {
 
         {/* Captured Images Summary */}
         {captures.length > 0 && (
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="font-semibold text-lg mb-3">
+          <div className="p-4 rounded-lg bg-gray-50">
+            <h3 className="mb-3 text-lg font-semibold">
               Captured Images ({captures.length})
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
               {captures.map((capture, index) => (
                 <div
                   key={index}
-                  className="aspect-square bg-white rounded-lg overflow-hidden shadow-sm"
+                  className="overflow-hidden bg-white rounded-lg shadow-sm aspect-square"
                 >
                   {capture.image && (
                     <img
                       src={capture.image}
                       alt={`${capture.angle} view`}
-                      className="w-full h-full object-cover"
+                      className="object-cover w-full h-full"
                     />
                   )}
                   <div className="p-2 text-xs text-center bg-gray-100">
@@ -171,7 +200,7 @@ export default function CameraPage() {
           {captures.length > 0 && (
             <button
               onClick={() => (window.location.href = '/analysis')}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-6 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
             >
               Continue to Analysis →
             </button>
